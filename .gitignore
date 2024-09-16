@@ -12,6 +12,7 @@
 # Others
 *.exe
 *.dat
+docker/Dockerfile
 
 ### VisualStudioCode ###
 .vscode/

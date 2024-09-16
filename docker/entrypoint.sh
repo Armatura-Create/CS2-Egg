@@ -10,7 +10,7 @@ WHITE='\033[0;37m'
 NC='\033[0m' # No Color
 
 # Prefix for logs
-PREFIX="${RED}[KitsuneLab]${WHITE} > "
+PREFIX="${YELLOW}[ServUP]${WHITE} > "
 
 # Function to log messages with colors
 log_message() {

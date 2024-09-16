@@ -1,0 +1,275 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-09-02T08:04:42+00:00",
+    "name": "ServUP CS2 Egg @ by K4ryuu & Armatura remade",
+    "author": "alext303@gmail.com",
+    "uuid": "c586f568-22f3-4f56-a6e8-914265045158",
+    "description": "SteamRT3 Platform image for Pterodactyl CS2 servers by 1zc, which is modified and tweaked with custom scripts by K4ryuu.",
+    "features": [],
+    "docker_images": {
+        "KitsuneLab CS2": "docker.io\/scrender\/servup-cs2:latest"
+    },
+    "file_denylist": [],
+    "startup": ".\/game\/cs2.sh -dedicated -strictportbind +ip  $( [ \"$RCON_ENABLED\" == \"1\" ] && printf '%s' '0.0.0.0' || printf '%s' '{{SERVER_IP}}' ) -port {{SERVER_PORT}} +map {{SRCDS_MAP}} -maxplayers {{SRCDS_MAXPLAYERS}} -maxplayers_override {{SRCDS_MAXPLAYERS}}  -norestart $( [ \"$VAC_ENABLED\" == \"1\" ] && printf '%s' '-secure' || printf '%s' '-insecure' ) $( [ \"$NO_BOTS\" == \"0\" ] || printf %s ' -nobots' ) $( [ \"$RCON_ENABLED\" == \"1\" ] || printf %s ' -usercon' ) +sv_setsteamaccount {{STEAM_ACC}} +game_type {{GAME_TYPE}} +game_mode {{GAME_MODE}} +host_workshop_map {{WORKSHOP_MAP_ID}} +host_workshop_collection {{WORKSHOP_COLLECTIONS_ID}} +mapgroup {{MAP_GROUP}} +servercfgfile {{CFG_FILE}} {{CUSTOM_PARAMS}} $( [ \"$DEBUG\" == \"0\" ] || printf %s ' -debug' )",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Connection to Steam servers successful\"\r\n}",
+        "logs": "{}",
+        "stop": "quit"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# steamcmd Base Installation Script\r\n\r\nfind \/mnt\/server\/game -mindepth 1 -maxdepth 1 -not -name \"csgo\" -not -name \"csgo_lv\" -not -name \"csgo_core\" -not -name \"csgo_imported\" -not -name \"core\" -exec rm -rf {} +\r\nfind \/mnt\/server\/game\/csgo -mindepth 1 -maxdepth 1 -not -name \"maps\" -exec rm -rf {} +\r\nfind \/mnt\/server\/game\/csgo\/maps -mindepth 1 -maxdepth 1 -not -name \"ui\" -not -name \"templates\" -not -name \"editor\" -not -name \"prefabs\" -exec rm -rf {} +\r\nfind \/mnt\/server\/game\/csgo\/maps\/editor -mindepth 1 -maxdepth 1 -not -name \"zoo\" -exec rm -rf {} +\r\nfind \/mnt\/server\/game\/csgo\/maps\/prefabs -mindepth 1 -maxdepth 1 -not -name \"cs_italy\" -not -name \"cs_italy_s2\" -not -name \"cs_office\" -not -name \"de_ancient\" -not -name \"de_anubis\" -not -name \"de_dust2\" -not -name \"de_inferno\" -not -name \"de_mirage\" -not -name \"de_nuke\" -not -name \"de_vertigo\" -not -name \"misc\" -not -name \"overpass\" -exec rm -rf {} +\r\n\r\n#\r\n# Server Files: \/mnt\/server\r\napt update\r\napt -y --no-install-recommends install curl lib32gcc-s1 ca-certificates rsync lib32stdc++6 iproute2 wget\r\n\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\n  STEAM_USER=anonymous\r\n  STEAM_PASS=\"\"\r\n  STEAM_AUTH=\"\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\nmkdir -p \/mnt\/server\/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\nrsync -rv --exclude=\"*.vpk\" \/tmp\/cs2_ds\/* \/mnt\/server\r\n\r\n# Copy css-update.sh to the target directory and set full permissions\r\n#cp \/tmp\/cs2_ds\/game\/kitsunelab-scripts.sh \/mnt\/server\/game\/kitsunelab-scripts.sh\r\n#chmod -R root:root \/mnt\/server\/game\/kitsunelab-scripts.sh\r\n\r\n# Array of source directories and their corresponding target directories\r\ndeclare -A dirs=(\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\"]=\"game\/csgo\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo_lv\"]=\"game\/csgo_lv\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo_core\"]=\"game\/csgo_core\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo_imported\"]=\"game\/csgo_imported\"\r\n  [\"\/tmp\/cs2_ds\/game\/core\"]=\"game\/core\"\r\n  [\"\/tmp\/cs2_ds\/game\/core\/maps\"]=\"game\/core\/maps\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/ui\"]=\"game\/csgo\/maps\/ui\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/templates\"]=\"game\/csgo\/maps\/templates\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/editor\"]=\"game\/csgo\/maps\/editor\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/editor\/zoo\"]=\"game\/csgo\/maps\/editor\/zoo\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\"]=\"game\/csgo\/maps\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/cs_italy\"]=\"game\/csgo\/maps\/prefabs\/cs_italy\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/cs_italy_s2\"]=\"game\/csgo\/maps\/prefabs\/cs_italy_s2\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/cs_office\"]=\"game\/csgo\/maps\/prefabs\/cs_office\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_ancient\"]=\"game\/csgo\/maps\/prefabs\/de_ancient\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_anubis\"]=\"game\/csgo\/maps\/prefabs\/de_anubis\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_dust2\"]=\"game\/csgo\/maps\/prefabs\/de_dust2\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_inferno\"]=\"game\/csgo\/maps\/prefabs\/de_inferno\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_mirage\"]=\"game\/csgo\/maps\/prefabs\/de_mirage\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_nuke\"]=\"game\/csgo\/maps\/prefabs\/de_nuke\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/de_vertigo\"]=\"game\/csgo\/maps\/prefabs\/de_vertigo\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/misc\"]=\"game\/csgo\/maps\/prefabs\/misc\"\r\n  [\"\/tmp\/cs2_ds\/game\/csgo\/maps\/prefabs\/overpass\"]=\"game\/csgo\/maps\/prefabs\/overpass\"\r\n)\r\n\r\n# Create symbolic links for all vpk files\r\nfor src_dir in \"${!dirs[@]}\"; do\r\n  target_dir=\"\/mnt\/server\/${dirs[$src_dir]}\"\r\n  mkdir -p \"$target_dir\"\r\n  for vpk_file in \"$src_dir\"\/*.vpk; do\r\n    ln -sf \"$vpk_file\" \"$target_dir\/\"\r\n  done\r\ndone\r\n\r\n## install game using steamcmd\r\n.\/steamcmd.sh +force_install_dir \/mnt\/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update 730 ${EXTRA_FLAGS} +quit ## other flags may be needed depending on install. looking at you cs 1.6\r\n\r\n## set up 32 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/.steam\/sdk32\/steamclient.so\r\n\r\n## set up 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/.steam\/sdk64\/steamclient.so\r\n\r\n## set permissions\r\nchmod -R 750 \/mnt\/server\/",
+            "container": "ghcr.io\/pterodactyl\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "sort": 1,
+            "name": "Map",
+            "description": "The default map for the server.",
+            "env_variable": "SRCDS_MAP",
+            "default_value": "de_dust2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|alpha_dash",
+            "field_type": "text"
+        },
+        {
+            "sort": 2,
+            "name": "Source AppID",
+            "description": "NOT VISIBLE TO USERS. DO NOT EDIT.",
+            "env_variable": "SRCDS_APPID",
+            "default_value": "730",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|numeric",
+            "field_type": "text"
+        },
+        {
+            "sort": 3,
+            "name": "Max Players",
+            "description": "The maximum number of players the server can host.",
+            "env_variable": "SRCDS_MAXPLAYERS",
+            "default_value": "32",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric",
+            "field_type": "text"
+        },
+        {
+            "sort": 4,
+            "name": "Disable Updates",
+            "description": "Set to 1 to stop updates.",
+            "env_variable": "SRCDS_STOP_UPDATE",
+            "default_value": "0",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|numeric",
+            "field_type": "text"
+        },
+        {
+            "sort": 5,
+            "name": "Validate Install",
+            "description": "Toggles SteamCMD validation of game server files. Set to 0 to disable.",
+            "env_variable": "SRCDS_VALIDATE",
+            "default_value": "0",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|numeric",
+            "field_type": "text"
+        },
+        {
+            "sort": 6,
+            "name": "Game Server Login Token (GSLT)",
+            "description": "The Steam Account Token required for the server to be displayed publicly. https:\/\/steamcommunity.com\/dev\/managegameservers",
+            "env_variable": "STEAM_ACC",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "max:32|nullable",
+            "field_type": "text"
+        },
+        {
+            "sort": 7,
+            "name": "Game Type",
+            "description": "",
+            "env_variable": "GAME_TYPE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|in:0,1,2,3,4,5,6",
+            "field_type": "text"
+        },
+        {
+            "sort": 8,
+            "name": "Game Mode",
+            "description": "",
+            "env_variable": "GAME_MODE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|in:0,1,2,3,4",
+            "field_type": "text"
+        },
+        {
+            "sort": 9,
+            "name": "Junk Cleaner",
+            "description": "Cleans up automatically logs after 72 hour, demo files after 7 days and round backup files after 24 hour.",
+            "env_variable": "CLEANUP_ENABLED",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 10,
+            "name": "CounterStrikeSharp Updater",
+            "description": "Enable or disable the automatic update of CounterStrikeSharp on every server startup.",
+            "env_variable": "CSS_AUTOUPDATE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 11,
+            "name": "Metamod Updater",
+            "description": "Enable or disable the automatic update of Metamod on every server startup.",
+            "env_variable": "METAMOD_AUTOUPDATE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 12,
+            "name": "Console Cleaner",
+            "description": "Enable or disable the console filter to hide specific messages. Configure it using the file at '\/game\/mute_messages.cfg' when enabled.",
+            "env_variable": "ENABLE_FILTER",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 13,
+            "name": "Console Cleaner - Preview Mode",
+            "description": "Enable or disable preview mode for the console filter. In preview mode, blocked messages are shown in red, allowing you to verify your filter configuration.",
+            "env_variable": "FILTER_PREVIEW_MODE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 14,
+            "name": "Workshop Map",
+            "description": "Start map ID from workshop",
+            "env_variable": "WORKSHOP_MAP_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        },
+        {
+            "sort": 15,
+            "name": "No Bots",
+            "description": "Complete shutdown of bots on the server. (Has bugs behind it, including that the smoke grenade shows the enemy on the radar)",
+            "env_variable": "NO_BOTS",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 16,
+            "name": "Valve Anti-Cheat",
+            "description": "Enable or disable Valve Anti-Cheat on your server. Default - Enable",
+            "env_variable": "VAC_ENABLED",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 17,
+            "name": "Using Rcon",
+            "description": "Enable or disable RCON on the server. Read more: https:\/\/developer.valvesoftware.com\/wiki\/Source_RCON_Protocol",
+            "env_variable": "RCON_ENABLED",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 18,
+            "name": "Debug",
+            "description": "Enable debug mode. IF YOU DON'T KNOW WHAT IT'S FOR, DON'T TURN IT ON!",
+            "env_variable": "DEBUG",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        },
+        {
+            "sort": 19,
+            "name": "Workshop Collections",
+            "description": "Collection ID from workshop",
+            "env_variable": "WORKSHOP_COLLECTIONS_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        },
+        {
+            "sort": 20,
+            "name": "SERVER CONFIG",
+            "description": "Default server config, ex. server.cfg",
+            "env_variable": "CFG_FILE",
+            "default_value": "cs2server.cfg",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        },
+        {
+            "sort": 21,
+            "name": "MAP GROUP",
+            "description": "Ex. mb_bomb",
+            "env_variable": "MAP_GROUP",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        },
+        {
+            "sort": 22,
+            "name": "CUSTOM PARAMS",
+            "description": "Custom params for startup server",
+            "env_variable": "CUSTOM_PARAMS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        }
+    ]
+}
