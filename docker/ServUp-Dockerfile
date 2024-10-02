@@ -19,4 +19,5 @@ WORKDIR     /home/container
 
 # EP
 COPY        ./entrypoint.sh /entrypoint.sh
+COPY        ./servUpConfig.cfg /servUpConfig.cfg
 CMD         [ "/bin/bash", "/entrypoint.sh" ]

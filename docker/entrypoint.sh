@@ -218,7 +218,7 @@ cleanup_and_update() {
         log_message "Starting cleanup..." "running"
 
         # Run all purge functions
-        purge_files "$GAME_DIRECTORY" "*.txt" $BACKUP_ROUND_PURGE_INTERVAL "Logs"
+        purge_files "$GAME_DIRECTORY" "backup_round*.txt" $BACKUP_ROUND_PURGE_INTERVAL "Logs"
         purge_files "$GAME_DIRECTORY" "*.dem" $DEMO_PURGE_INTERVAL "Demos"
         purge_files "$GAME_DIRECTORY/addons/counterstrikesharp/logs" "*.txt" $CSS_JUNK_PURGE_INTERVAL "CSS Logs"
 
@@ -411,6 +411,48 @@ cleanup_and_update() {
     rm -rf "$TEMP_DIR"
     log_message "Cleanup completed." "success"
 }
+
+update_server_cfg() {
+
+    ROOT_CFG="/servUpConfig.cfg"
+    # Server Configuration File
+    SERVER_CFG="./game/csgo/cfg/${CFG_FILE}"
+
+    if [ ! -f "$ROOT_CFG" ]; then
+        log_message "Configuration file servUpConfig.cfg not found. Skipping server configuration update." "error"
+    else
+        # Check if the server.cfg file exists
+        if [ -f "$SERVER_CFG" ]; then
+            # If file exists, update it
+            while IFS= read -r line || [[ -n "$line" ]]; do
+                # Trim whitespace from both ends of the line
+                trimmed_line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+                # Skip empty lines and lines starting with //
+                if [[ -n "$trimmed_line" && ! "$trimmed_line" =~ ^// ]]; then
+                    # Get the first word of the trimmed line (command)
+                    first_word=$(echo "$trimmed_line" | awk '{print $1}')
+                    
+                    # Check if the command (first word) exists in the current server.cfg
+                    if ! grep -q "^$first_word\b" "$SERVER_CFG"; then
+                        echo "$trimmed_line" >> "$SERVER_CFG"
+                        log_message "Added line to server config: $trimmed_line" "success"
+                    fi
+                fi
+            done < "$ROOT_CFG"
+        else
+            # If file does not exist, copy the entire config file
+            cp "$ROOT_CFG" "$SERVER_CFG"
+            log_message "Configuration file $SERVER_CFG created from servUpConfig.cfg." "success"
+        fi
+    fi
+}
+
+# Update the server configuration file if required
+if [ "$UPDATE_CFG_FILE" = "1" ]; then
+    log_message "Updating server configuration..." "running"
+    update_server_cfg
+fi
 
 # Run cleanup and update
 cleanup_and_update || log_message "Cleanup and update encountered errors but proceeding to start the server." "error"
