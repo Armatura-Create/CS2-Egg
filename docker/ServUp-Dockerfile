@@ -1,8 +1,8 @@
 # Dockerfile with SteamRT3
 FROM        registry.gitlab.steamos.cloud/steamrt/sniper/platform:latest-container-runtime-depot
-LABEL       author="K4ryuu & Liam C" \
-            maintainer="k4ryuu@icloud.com" \
-            org.opencontainers.image.description="SteamRT3 Platform image for Pelican CSGO/CS2/Source engine servers by 1zc, which is modified and tweaked with custom scripts by K4ryuu." \
+LABEL       author="Armatura" \
+            maintainer="alext303@gmail.com" \
+            org.opencontainers.image.description="SteamRT3 Platform image for Pelican CSGO/CS2/Source engine servers by 1zc, which is modified by Armatura." \
             org.opencontainers.image.source="https://github.com/Armatura-Create/CS2-Egg"
 
 # Prep OS
