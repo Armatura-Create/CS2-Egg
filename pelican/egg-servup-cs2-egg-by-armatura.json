@@ -4,10 +4,9 @@
         "version": "PLCN_v1",
         "update_url": "https:\/\/raw.githubusercontent.com\/Armatura-Create\/CS2-Egg\/refs\/heads\/dev\/pelican\/egg-servup-cs2-egg-by-armatura.json"
     },
-    "exported_at": "2024-12-08T10:43:18+00:00",
+    "exported_at": "2024-12-08T10:45:39+00:00",
     "name": "ServUP CS2 Egg @ by Armatura",
     "author": "alext303@gmail.com",
-    "uuid": "726b4441-2620-4a3d-bd08-d5f5a5c10724",
     "description": "The SteamRT3 Platform image for Pelican CS2 servers is packed with numerous features, designed to simplify server management and reduce hassle.",
     "features": [],
     "docker_images": {
@@ -162,7 +161,7 @@
             "rules": [
                 "required",
                 "boolean",
-                "in:treu,false"
+                "in:true,false"
             ]
         },
         {

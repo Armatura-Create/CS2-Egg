@@ -37,7 +37,7 @@ start_update_countdown() {
                     -H "Authorization: Bearer $PELICAN_API_TOKEN" \
                     -H "Content-Type: application/json" \
                     --data "{\"command\": \"$command\"}" \
-                    "$PTERODACTYL_URL/api/client/servers/$P_SERVER_UUID/command")
+                    "$$PELICAN_URL/api/client/servers/$P_SERVER_UUID/command")
 
                 local http_code=${response: -3}
                 if [[ $http_code -lt 200 || $http_code -gt 299 ]]; then
@@ -54,7 +54,7 @@ start_update_countdown() {
     log_message "Restarting server by Auto-Restart..." "running"
 
     # Server restart
-    local restart_response=$(curl -s -w "%{http_code}" "$PTERODACTYL_URL/api/client/servers/$P_SERVER_UUID/power" \
+    local restart_response=$(curl -s -w "%{http_code}" "$$PELICAN_URL/api/client/servers/$P_SERVER_UUID/power" \
         -H 'Accept: application/json' \
         -H 'Content-Type: application/json' \
         -H "Authorization: Bearer $PELICAN_API_TOKEN" \
