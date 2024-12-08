@@ -8,7 +8,7 @@ start_update_countdown() {
     UPDATE_IN_PROGRESS=1
 
     # Validate essential API variables
-    if [ -z "$PTERODACTYL_API_TOKEN" ] || [ -z "$P_SERVER_UUID" ] || [ -z "$PTERODACTYL_URL" ]; then
+    if [ -z "$PELICAN_API_TOKEN" ] || [ -z "$P_SERVER_UUID" ] || [ -z "$PELICAN_URL" ]; then
         log_message "Missing required API variables" "error"
         UPDATE_IN_PROGRESS=0
         return 1
@@ -34,7 +34,7 @@ start_update_countdown() {
 
             if [ -n "$command" ]; then
                 local response=$(curl -s -w "%{http_code}" -X POST \
-                    -H "Authorization: Bearer $PTERODACTYL_API_TOKEN" \
+                    -H "Authorization: Bearer $PELICAN_API_TOKEN" \
                     -H "Content-Type: application/json" \
                     --data "{\"command\": \"$command\"}" \
                     "$PTERODACTYL_URL/api/client/servers/$P_SERVER_UUID/command")
@@ -57,7 +57,7 @@ start_update_countdown() {
     local restart_response=$(curl -s -w "%{http_code}" "$PTERODACTYL_URL/api/client/servers/$P_SERVER_UUID/power" \
         -H 'Accept: application/json' \
         -H 'Content-Type: application/json' \
-        -H "Authorization: Bearer $PTERODACTYL_API_TOKEN" \
+        -H "Authorization: Bearer $PELICAN_API_TOKEN" \
         -X POST \
         -d '{"signal": "restart"}')
 

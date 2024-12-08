@@ -1,13 +1,14 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v1",
         "update_url": "https:\/\/raw.githubusercontent.com\/Armatura-Create\/CS2-Egg\/refs\/heads\/dev\/pelican\/egg-servup-cs2-egg-by-armatura.json"
     },
-    "exported_at": "2024-10-03T07:02:56+00:00",
+    "exported_at": "2024-12-08T10:43:18+00:00",
     "name": "ServUP CS2 Egg @ by Armatura",
     "author": "alext303@gmail.com",
-    "description": "The SteamRT3 Platform image for Pterodactyl CS2 servers is packed with numerous features, designed to simplify server management and reduce hassle.",
+    "uuid": "726b4441-2620-4a3d-bd08-d5f5a5c10724",
+    "description": "The SteamRT3 Platform image for Pelican CS2 servers is packed with numerous features, designed to simplify server management and reduce hassle.",
     "features": [],
     "docker_images": {
         "ServUp CS2": "docker.io\/scrender\/servup-cs2:latest",
@@ -23,7 +24,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: /mnt/server\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\nSTEAM_USER=anonymous\r\nSTEAM_PASS=\"\"\r\nSTEAM_AUTH=\"\"\r\nfi\r\n## download and install steamcmd\r\ncd /tmp\r\nmkdir -p /mnt/server/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C /mnt/server/steamcmd\r\nmkdir -p /mnt/server/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd /mnt/server/steamcmd\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root /mnt\r\nexport HOME=/mnt/server\r\n## install game using steamcmd\r\n./steamcmd.sh +force_install_dir /mnt/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update ${SRCDS_APPID} ${EXTRA_FLAGS} +quit ## other flags may be needed depending on install. looking at you cs 1.6\r\n## set up 32 bit libraries\r\nmkdir -p /mnt/server/.steam/sdk32\r\ncp -v linux32/steamclient.so ../.steam/sdk32/steamclient.so\r\n## set up 64 bit libraries\r\nmkdir -p /mnt/server/.steam/sdk64\r\ncp -v linux64/steamclient.so ../.steam/sdk64/steamclient.so",
+            "script": "#!\/bin\/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\nSTEAM_USER=anonymous\r\nSTEAM_PASS=\"\"\r\nSTEAM_AUTH=\"\"\r\nfi\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\nmkdir -p \/mnt\/server\/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd \/mnt\/server\/steamcmd\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n## install game using steamcmd\r\n.\/steamcmd.sh +force_install_dir \/mnt\/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update ${SRCDS_APPID} ${EXTRA_FLAGS} +quit ## other flags may be needed depending on install. looking at you cs 1.6\r\n## set up 32 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/.steam\/sdk32\/steamclient.so\r\n## set up 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/.steam\/sdk64\/steamclient.so",
             "container": "ghcr.io\/pterodactyl\/installers:debian",
             "entrypoint": "bash"
         }
@@ -44,7 +45,7 @@
             ]
         },
         {
-            "sort": 25,
+            "sort": 24,
             "name": "Source AppID",
             "description": "\u041d\u0415 \u0412\u0418\u0414\u0418\u041c\u041e \u0414\u041b\u042f \u041f\u041e\u041b\u042c\u0417\u041e\u0412\u0410\u0422\u0415\u041b\u0415\u0419. \u041d\u0415 \u0418\u0417\u041c\u0415\u041d\u042f\u0422\u042c.",
             "env_variable": "SRCDS_APPID",
@@ -70,7 +71,7 @@
             ]
         },
         {
-            "sort": 24,
+            "sort": 23,
             "name": "Disable Updates",
             "description": "\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 1, \u0447\u0442\u043e\u0431\u044b \u043e\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u044c \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f.",
             "env_variable": "SRCDS_STOP_UPDATE",
@@ -83,7 +84,7 @@
             ]
         },
         {
-            "sort": 26,
+            "sort": 25,
             "name": "Validate Install",
             "description": "\u0412\u043a\u043b\u044e\u0447\u0430\u0435\u0442 \u0438\u043b\u0438 \u043e\u0442\u043a\u043b\u044e\u0447\u0430\u0435\u0442 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443 \u0444\u0430\u0439\u043b\u043e\u0432 \u0438\u0433\u0440\u043e\u0432\u043e\u0433\u043e \u0441\u0435\u0440\u0432\u0435\u0440\u0430 \u0447\u0435\u0440\u0435\u0437 SteamCMD. \u0423\u0441\u0442\u0430\u043d\u043e\u0432\u0438\u0442\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 0, \u0447\u0442\u043e\u0431\u044b \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c.",
             "env_variable": "SRCDS_VALIDATE",
@@ -137,7 +138,7 @@
             ]
         },
         {
-            "sort": 12,
+            "sort": 13,
             "name": "Junk Cleaner - Enabled",
             "description": "\u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438 \u043e\u0447\u0438\u0449\u0430\u0435\u0442 \u043b\u043e\u0433\u0438 \u0447\u0435\u0440\u0435\u0437 72 \u0447\u0430\u0441\u0430, \u0444\u0430\u0439\u043b\u044b \u0434\u0435\u043c\u043e \u0447\u0435\u0440\u0435\u0437 7 \u0434\u043d\u0435\u0439 \u0438 \u0440\u0435\u0437\u0435\u0440\u0432\u043d\u044b\u0435 \u043a\u043e\u043f\u0438\u0438 \u0440\u0430\u0443\u043d\u0434\u043e\u0432 \u0447\u0435\u0440\u0435\u0437 24 \u0447\u0430\u0441\u0430.",
             "env_variable": "CLEANUP_ENABLED",
@@ -181,7 +182,7 @@
         {
             "sort": 11,
             "name": "Filter - Enabled",
-            "description": "Enable or disable the console filter to hide specific messages. Configure it using the file at '/game/mute_messages.cfg' when enabled.",
+            "description": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u043b\u0438 \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0444\u0438\u043b\u044c\u0442\u0440 \u043a\u043e\u043d\u0441\u043e\u043b\u0438, \u0447\u0442\u043e\u0431\u044b \u0441\u043a\u0440\u044b\u0442\u044c \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f. \u041d\u0430\u0441\u0442\u0440\u043e\u0439\u0442\u0435 \u0435\u0433\u043e \u0441 \u043f\u043e\u043c\u043e\u0449\u044c\u044e \u0444\u0430\u0439\u043b\u0430 '\/game\/mute_messages.cfg', \u0435\u0441\u043b\u0438 \u0432\u043a\u043b\u044e\u0447\u0435\u043d\u043e.",
             "env_variable": "ENABLE_FILTER",
             "default_value": "0",
             "user_viewable": true,
@@ -193,24 +194,10 @@
             ]
         },
         {
-            "sort": 21,
-            "name": "Console Cleaner - Preview Mode",
-            "description": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u043b\u0438 \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0440\u0435\u0436\u0438\u043c \u043f\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0430 \u0434\u043b\u044f \u0444\u0438\u043b\u044c\u0442\u0440\u0430 \u043a\u043e\u043d\u0441\u043e\u043b\u0438. \u0412 \u0440\u0435\u0436\u0438\u043c\u0435 \u043f\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0430 \u0437\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u043e\u0442\u043e\u0431\u0440\u0430\u0436\u0430\u044e\u0442\u0441\u044f \u043a\u0440\u0430\u0441\u043d\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c, \u0447\u0442\u043e \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u0435\u0442 \u0432\u0430\u043c \u043f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0443 \u0444\u0438\u043b\u044c\u0442\u0440\u0430.",
-            "env_variable": "FILTER_PREVIEW_MODE",
-            "default_value": "0",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "boolean",
-                "in:true,false"
-            ]
-        },
-        {
-            "sort": 13,
-            "name": "Custom Parameters",
-            "description": "\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0435 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0437\u0430\u043f\u0443\u0441\u043a\u0430, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0432 \u0441\u0442\u0440\u043e\u043a\u0443 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435",
-            "env_variable": "CUSTOM_PARAMS",
+            "sort": 17,
+            "name": "Workshop Map",
+            "description": "\u0417\u0430\u043f\u0443\u0441\u043a \u043a\u0430\u0440\u0442\u044b \u043f\u043e ID \u0438\u0437 Workshop",
+            "env_variable": "WORKSHOP_MAP_ID",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
@@ -220,110 +207,7 @@
             ]
         },
         {
-            "name": "Auto Restart - Enabled",
-            "description": "Enable or disable the automatic server restart when a new game version is detected.",
-            "env_variable": "UPDATE_AUTO_RESTART",
-            "default_value": "0",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "boolean",
-                "in:true,false"
-            ]
-        },
-        {
-            "name": "Auto Restart - Check Interval",
-            "description": "The update detection interval, in seconds, for automatic restarts.\r\nPlease note that excessive usage may trigger Steam's rate limiting.",
-            "env_variable": "VERSION_CHECK_INTERVAL",
-            "default_value": "300",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [
-                "required",
-                "integer",
-                "min:60"
-            ]
-        },
-        {
-            "name": "Auto Restart - API URL",
-            "description": "The panel URL used for API calls.\r\nThis should remain hidden from users. Update the default value to ensure all new servers use this setting.",
-            "env_variable": "PTERODACTYL_URL",
-            "default_value": "https://panel.domain.com",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [
-                "nullable",
-                "required",
-                "regex:/^https:\\/\\//"
-            ]
-        },
-        {
-            "name": "Auto Restart - User API key",
-            "description": "Your personal API key to this panel. You can generate a new one at \"API Credentials\".\r\nDo not add a default value here from an admin, if you host other people's server as it can be extracted from the docker environment. Let your users create their own.",
-            "env_variable": "PTERODACTYL_API_TOKEN",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string",
-                "regex:/^ptlc_.{43}$/"
-            ]
-        },
-        {
-            "name": "Auto Restart - Commands",
-            "description": "JSON structure for configuring update countdown notifications or executing specific commands at defined countdown intervals.",
-            "env_variable": "UPDATE_COMMANDS",
-            "default_value": "{\"300\": \"say Attention: The server will update in 5 minutes. Please prepare to save your progress.\", \"60\": \"say Heads up: The server will update in 1 minute. Save your progress now.\", \"30\": \"say Warning: The server update is happening in 30 seconds. Get ready!\", \"10\": \"say Final notice: The server will update in 10 seconds. Please stand by.\", \"3\": \"say Final countdown: Update in 3 seconds. Hold tight!\", \"2\": \"say Final countdown: Update in 2 seconds. Almost there!\", \"1\": \"say Final countdown: Update in 1 second. Restarting now!\"}",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ]
-        },
-        {
-            "name": "Auto Restart - Countdown Interval",
-            "description": "The time interval for the countdown in seconds before the restart.",
-            "env_variable": "UPDATE_COUNTDOWN_TIME",
-            "default_value": "300",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "integer",
-                "min:1"
-            ]
-        },
-        {
-            "name": "Egg - File Logging",
-            "description": "Log Egg messages to /egg.log, which is stored for 48 hours.",
-            "env_variable": "LOG_FILE_ENABLED",
-            "default_value": "0",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [
-                "required",
-                "boolean",
-                "in::true,false"
-            ]
-        },
-        {
-            "name": "Egg - Log Level",
-            "description": "The log level for the Egg to show in the console and log file.",
-            "env_variable": "LOG_LEVEL",
-            "default_value": "INFO",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [
-                "required",
-                "string",
-                "in:DEBUG,INFO,WARNING,ERROR"
-            ]
-        },
-        {
-            "sort": 14,
+            "sort": 15,
             "name": "No Bots",
             "description": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \/ \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0431\u043e\u0442\u043e\u0432 \u043d\u0430 \u0432\u0430\u0448\u0435\u043c \u0441\u0435\u0440\u0432\u0435\u0440\u0435. \u041f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e \u044d\u0442\u0430 \u043e\u043f\u0446\u0438\u044f \u0432\u043a\u043b\u044e\u0447\u0435\u043d\u0430.",
             "env_variable": "NO_BOTS",
@@ -349,7 +233,7 @@
             ]
         },
         {
-            "sort": 17,
+            "sort": 18,
             "name": "Using Rcon",
             "description": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \/ \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c RCON \u0434\u043b\u044f \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u044f RCON-\u043a\u043e\u043c\u0430\u043d\u0434 \u0441 \u0432\u043d\u0435\u0448\u043d\u0438\u043c\u0438 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u0430\u043c\u0438. \u041f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e \u044d\u0442\u0430 \u043e\u043f\u0446\u0438\u044f \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d\u0430.",
             "env_variable": "RCON_ENABLED",
@@ -363,19 +247,6 @@
         },
         {
             "sort": 16,
-            "name": "Workshop Map",
-            "description": "\u0417\u0430\u043f\u0443\u0441\u043a \u043a\u0430\u0440\u0442\u044b \u043f\u043e ID \u0438\u0437 Workshop",
-            "env_variable": "WORKSHOP_MAP_ID",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "string",
-                "nullable"
-            ]
-        },
-        {
-            "sort": 15,
             "name": "Workshop Collections",
             "description": "ID \u043a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u0438 \u0438\u0437 Workshop",
             "env_variable": "WORKSHOP_COLLECTIONS_ID",
@@ -388,7 +259,7 @@
             ]
         },
         {
-            "sort": 20,
+            "sort": 21,
             "name": "Name Config File",
             "description": "\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f \u0441\u0435\u0440\u0432\u0435\u0440\u0430 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e, \u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440, cs2server.cfg",
             "env_variable": "CFG_FILE",
@@ -401,10 +272,23 @@
             ]
         },
         {
-            "sort": 19,
+            "sort": 20,
             "name": "MAP GROUP",
             "description": "\u041d\u0430\u043f\u0440\u0438\u043c\u0435\u0440, mb_bomb",
             "env_variable": "MAP_GROUP",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "nullable"
+            ]
+        },
+        {
+            "sort": 14,
+            "name": "Custom Parameters",
+            "description": "\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u0441\u043a\u0438\u0435 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0437\u0430\u043f\u0443\u0441\u043a\u0430, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043d\u0443\u0436\u043d\u043e \u0434\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u0432 \u0441\u0442\u0440\u043e\u043a\u0443 \u0437\u0430\u043f\u0443\u0441\u043a\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435",
+            "env_variable": "CUSTOM_PARAMS",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
@@ -427,6 +311,20 @@
             ]
         },
         {
+            "sort": 22,
+            "name": "Config file updater",
+            "description": "\u041e\u0431\u043d\u043e\u0432\u043b\u044f\u0435\u043c \u0444\u0430\u0439\u043b \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0438 \u0435\u0441\u043b\u0438 \u043d\u0443\u0436\u043d\u043e",
+            "env_variable": "UPDATE_CFG_FILE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "boolean",
+                "in:true,false"
+            ]
+        },
+        {
             "sort": 2,
             "name": "Server Tags",
             "description": "\u0422\u044d\u0433\u0438 \u0441\u0435\u0440\u0432\u0435\u0440\u0430",
@@ -440,7 +338,7 @@
             ]
         },
         {
-            "sort": 18,
+            "sort": 19,
             "name": "Rcon Password",
             "description": "\u041f\u0430\u0440\u043e\u043b\u044c \u0434\u043b\u044f \u0443\u0434\u0430\u043b\u0435\u043d\u043d\u043e\u0433\u043e \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u0441\u0435\u0440\u0432\u0435\u0440\u0430 (\u0420\u0430\u0431\u043e\u0442\u0430\u0435\u0442 \u0435\u0441\u043b\u0438 \u0432\u043a\u043b\u044e\u0447\u0435\u043d <USING RCON>)",
             "env_variable": "RCON_PASSWORD",
@@ -453,10 +351,121 @@
             ]
         },
         {
-            "sort": 23,
-            "name": "Config file updater",
-            "description": "\u041e\u0431\u043d\u043e\u0432\u043b\u044f\u0435\u043c \u0444\u0430\u0439\u043b \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u0438 \u0435\u0441\u043b\u0438 \u043d\u0443\u0436\u043d\u043e",
-            "env_variable": "UPDATE_CFG_FILE",
+            "sort": 26,
+            "name": "Auto Restart - Enabled",
+            "description": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u043b\u0438 \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u043a \u0441\u0435\u0440\u0432\u0435\u0440\u0430 \u043f\u0440\u0438 \u043e\u0431\u043d\u0430\u0440\u0443\u0436\u0435\u043d\u0438\u0438 \u043d\u043e\u0432\u043e\u0439 \u0432\u0435\u0440\u0441\u0438\u0438 \u0438\u0433\u0440\u044b.",
+            "env_variable": "UPDATE_AUTO_RESTART",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "boolean",
+                "in:true,false"
+            ]
+        },
+        {
+            "sort": 27,
+            "name": "Auto Restart - Check Interval",
+            "description": "\u0418\u043d\u0442\u0435\u0440\u0432\u0430\u043b \u043e\u0431\u043d\u0430\u0440\u0443\u0436\u0435\u043d\u0438\u044f \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0439 \u0432 \u0441\u0435\u043a\u0443\u043d\u0434\u0430\u0445 \u0434\u043b\u044f \u0430\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0433\u043e \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u043a\u0430.\n\u041e\u0431\u0440\u0430\u0442\u0438\u0442\u0435 \u0432\u043d\u0438\u043c\u0430\u043d\u0438\u0435, \u0447\u0442\u043e \u0447\u0440\u0435\u0437\u043c\u0435\u0440\u043d\u043e\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435 \u043c\u043e\u0436\u0435\u0442 \u043f\u0440\u0438\u0432\u0435\u0441\u0442\u0438 \u043a \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044e \u0441\u043a\u043e\u0440\u043e\u0441\u0442\u0438 Steam.",
+            "env_variable": "VERSION_CHECK_INTERVAL",
+            "default_value": "300",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "integer",
+                "min:60"
+            ]
+        },
+        {
+            "sort": 30,
+            "name": "Auto Restart - API URL",
+            "description": "URL-\u0430\u0434\u0440\u0435\u0441 \u043f\u0430\u043d\u0435\u043b\u0438, \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u0443\u0435\u043c\u044b\u0439 \u0434\u043b\u044f \u0432\u044b\u0437\u043e\u0432\u043e\u0432 API.\n\u042d\u0442\u043e \u0434\u043e\u043b\u0436\u043d\u043e \u043e\u0441\u0442\u0430\u0432\u0430\u0442\u044c\u0441\u044f \u0441\u043a\u0440\u044b\u0442\u044b\u043c \u043e\u0442 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u0435\u0439. \u041e\u0431\u043d\u043e\u0432\u0438\u0442\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e, \u0447\u0442\u043e\u0431\u044b \u0432\u0441\u0435 \u043d\u043e\u0432\u044b\u0435 \u0441\u0435\u0440\u0432\u0435\u0440\u044b \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043b\u0438 \u044d\u0442\u043e\u0442 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440.",
+            "env_variable": "PELICAN_URL",
+            "default_value": "https:\/\/cp.servup.net",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "nullable",
+                "required",
+                "regex:\/^https:\\\/\\\/\/"
+            ]
+        },
+        {
+            "sort": 31,
+            "name": "Auto Restart - User API key",
+            "description": "\u0412\u0430\u0448 \u043f\u0435\u0440\u0441\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u0439 \u043a\u043b\u044e\u0447 API \u0434\u043b\u044f \u044d\u0442\u043e\u0439 \u043f\u0430\u043d\u0435\u043b\u0438. \u0412\u044b \u043c\u043e\u0436\u0435\u0442\u0435 \u0441\u0433\u0435\u043d\u0435\u0440\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u043d\u043e\u0432\u044b\u0439 \u0432 \u0440\u0430\u0437\u0434\u0435\u043b\u0435 \u00abAPI Credentials\u00bb.\n\u041d\u0435 \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u0439\u0442\u0435 \u0437\u0434\u0435\u0441\u044c \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e \u043e\u0442 \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440\u0430, \u0435\u0441\u043b\u0438 \u0432\u044b \u0440\u0430\u0437\u043c\u0435\u0449\u0430\u0435\u0442\u0435 \u0447\u0443\u0436\u043e\u0439 \u0441\u0435\u0440\u0432\u0435\u0440, \u0442\u0430\u043a \u043a\u0430\u043a \u0435\u0433\u043e \u043c\u043e\u0436\u043d\u043e \u0438\u0437\u0432\u043b\u0435\u0447\u044c \u0438\u0437 \u0441\u0440\u0435\u0434\u044b Docker. \u041f\u043e\u0437\u0432\u043e\u043b\u044c\u0442\u0435 \u0432\u0430\u0448\u0438\u043c \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f\u043c \u0441\u043e\u0437\u0434\u0430\u0432\u0430\u0442\u044c \u0441\u0432\u043e\u0438 \u0441\u043e\u0431\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0435.",
+            "env_variable": "PELICAN_API_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "string",
+                "regex:\/^ptlc_.{43}$\/"
+            ]
+        },
+        {
+            "sort": 29,
+            "name": "Auto Restart - Commands",
+            "description": "\u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 JSON \u0434\u043b\u044f \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0443\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0439 \u043e\u0431 \u043e\u0431\u0440\u0430\u0442\u043d\u043e\u043c \u043e\u0442\u0441\u0447\u0435\u0442\u0435 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0439 \u0438\u043b\u0438 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u044f \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0445 \u043a\u043e\u043c\u0430\u043d\u0434 \u0447\u0435\u0440\u0435\u0437 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u043d\u044b\u0435 \u0438\u043d\u0442\u0435\u0440\u0432\u0430\u043b\u044b \u043e\u0431\u0440\u0430\u0442\u043d\u043e\u0433\u043e \u043e\u0442\u0441\u0447\u0435\u0442\u0430.",
+            "env_variable": "UPDATE_COMMANDS",
+            "default_value": "{\"300\": \"say Server will update in 5 min.\", \"60\": \"say Server will update in 1 min\", \"30\": \"say Server will update in 30 sec.\", \"10\": \"say Server will update in 10 sec.\", \"3\": \"say Update in 3 sec.\", \"2\": \"say Update in 2 sec.\", \"1\": \"say Restarting!\"}",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "string"
+            ]
+        },
+        {
+            "sort": 28,
+            "name": "Auto Restart - Countdown Interval",
+            "description": "The time interval for the countdown in seconds before the restart.",
+            "env_variable": "UPDATE_COUNTDOWN_TIME",
+            "default_value": "300",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer",
+                "min:1"
+            ]
+        },
+        {
+            "sort": 33,
+            "name": "Egg - File Logging",
+            "description": "\u0417\u0430\u043f\u0438\u0441\u044b\u0432\u0430\u0439\u0442\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f Egg \u0432 \/egg.log, \u0433\u0434\u0435 \u043e\u043d\u0438 \u0445\u0440\u0430\u043d\u044f\u0442\u0441\u044f \u0432 \u0442\u0435\u0447\u0435\u043d\u0438\u0435 48 \u0447\u0430\u0441\u043e\u0432.",
+            "env_variable": "LOG_FILE_ENABLED",
+            "default_value": "0",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "boolean",
+                "in::true,false"
+            ]
+        },
+        {
+            "sort": 32,
+            "name": "Egg - Log Level",
+            "description": "The log level for the Egg to show in the console and log file.",
+            "env_variable": "LOG_LEVEL",
+            "default_value": "INFO",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "string",
+                "in:DEBUG,INFO,WARNING,ERROR"
+            ]
+        },
+        {
+            "sort": 12,
+            "name": "Filter - Preview Mode",
+            "description": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0438\u043b\u0438 \u043e\u0442\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0440\u0435\u0436\u0438\u043c \u043f\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0430 \u0434\u043b\u044f \u0444\u0438\u043b\u044c\u0442\u0440\u0430 \u043a\u043e\u043d\u0441\u043e\u043b\u0438. \u0412 \u0440\u0435\u0436\u0438\u043c\u0435 \u043f\u0440\u0435\u0434\u0432\u0430\u0440\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0430 \u0437\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f \u043e\u0442\u043e\u0431\u0440\u0430\u0436\u0430\u044e\u0442\u0441\u044f \u043a\u0440\u0430\u0441\u043d\u044b\u043c \u0446\u0432\u0435\u0442\u043e\u043c, \u0447\u0442\u043e \u043f\u043e\u0437\u0432\u043e\u043b\u044f\u0435\u0442 \u0432\u0430\u043c \u043f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044e \u0444\u0438\u043b\u044c\u0442\u0440\u0430.",
+            "env_variable": "FILTER_PREVIEW_MODE",
             "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
